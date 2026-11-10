@@ -79,6 +79,7 @@ class ApplicationState extends ConsumerState<Application> {
       }
       _autoUpdateProfilesTask();
       _initLink();
+      _presetProfile();
       if (!safeModeBuild) {
         unawaited(app?.initShortcuts());
       }
@@ -112,6 +113,21 @@ class ApplicationState extends ConsumerState<Application> {
         ref.read(profilesActionProvider.notifier).addProfileFromLink(url),
       );
     });
+  }
+
+  void _presetProfile() {
+    const presetUrl = String.fromEnvironment('PRESET_SUB_URL');
+    if (presetUrl.isEmpty) {
+      return;
+    }
+    if (ref.read(profilesProvider).isNotEmpty) {
+      return;
+    }
+    unawaited(
+      ref
+          .read(profilesActionProvider.notifier)
+          .addProfileFromLink(presetUrl, label: '圣何塞主力'),
+    );
   }
 
   void _autoUpdateProfilesTask() {
