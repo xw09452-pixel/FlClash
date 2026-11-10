@@ -125,7 +125,12 @@ List<String> createFlutterBuildArgs({
 }
 
 Map<String, String> createBuildEnvironment(String env) {
-  return {'APP_ENV': env};
+  final result = {'APP_ENV': env};
+  final presetSubUrl = Platform.environment['PRESET_SUB_URL'];
+  if (presetSubUrl != null && presetSubUrl.isNotEmpty) {
+    result['PRESET_SUB_URL'] = presetSubUrl;
+  }
+  return result;
 }
 
 /// Packages whose build hook `pubspec.yaml` turns into a no-op.
